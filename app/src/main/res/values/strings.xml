@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">QianZhi</string>
+    <string name="nav_home">首页</string>
+    <string name="nav_bookmark">书签</string>
+    <string name="nav_theme">主题</string>
+    <string name="nav_setting">设置</string>
+    <string name="nav_about">关于</string>
+    <string name="navigation_drawer_open">DrawerOpen</string>
+    <string name="navigation_drawer_close">DrawerClose</string>
+    <string name="nav_bookmarks">Bookmarks</string>
+    <string name="action_feel_lucky">随便看看</string>
+    <string name="load_more">加载更多</string>
 </resources>

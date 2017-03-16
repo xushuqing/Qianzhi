@@ -1,5 +1,7 @@
 package com.handsomexu.qianzhi.interfaces;
 
+import com.handsomexu.qianzhi.bean.ZhihuDailyNews;
+
 import java.util.ArrayList;
 
 /**
@@ -11,7 +13,7 @@ import java.util.ArrayList;
 public interface ZhihuDailyContract {
     interface View extends BaseView<Presenter> {
 
-        //显示加载或其他类型的错误
+        //显示加载错误或其他类型的错误
         void showError();
 
         //显示正在加载
@@ -21,7 +23,7 @@ public interface ZhihuDailyContract {
         void stopLoading();
 
         //成功获取数据后，在界面显示
-        void showResults(ArrayList<ZhihuDailyNews.Question> list);
+        void showResults(ArrayList<ZhihuDailyNews.Story> list);
         //显示日期选择器
         void showPickDialog();
     }

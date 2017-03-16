@@ -10,9 +10,9 @@ public interface BaseView<T> {
 
 
     //为View设置Presenter
-    void setPresenter(T presentr);
+    void setPresenter(T presenter);
 
-    //初始化界
-    void initView(View viewview);
+    //初始化View
+    void initView(View view);
 
 }

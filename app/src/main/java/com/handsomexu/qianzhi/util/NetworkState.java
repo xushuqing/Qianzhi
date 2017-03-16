@@ -44,7 +44,8 @@ public class NetworkState {
             if(info != null){
                 return  info.isAvailable();
             }
-            return false;
+
         }
+        return false;
     }
 }

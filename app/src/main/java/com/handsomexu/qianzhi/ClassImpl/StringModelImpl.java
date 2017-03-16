@@ -14,25 +14,33 @@ import com.handsomexu.qianzhi.network.VolleySingleton;
 
 public class StringModelImpl {
     private Context context;
+    private OnStringListener mOnStringListener;
 
     public StringModelImpl(Context context){
         this.context = context;
     }
 
     public void load(String url, final OnStringListener listener){
-        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                listener.onSuccess(response);
-            }
-        },new Response.ErrorListener(){
+        mOnStringListener = listener;
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                listener.onFailure(error);
-            }
-        });
-            VolleySingleton.getVolleySingleton(context).addToRequestQueue(request);
+        StringRequest request = new StringRequest(url,onSuccessListener,onErrorListener);
+
+        VolleySingleton.getVolleySingleton(context).addToRequestQueue(request);
     }
 
+
+
+    Response.Listener onSuccessListener = new Response.Listener<String>() {
+        @Override
+        public void onResponse(String response) {
+            mOnStringListener.onSuccess(response);
+        }
+    };
+
+    Response.ErrorListener onErrorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            mOnStringListener.onFailure(error);
+        }
+    };
 }
