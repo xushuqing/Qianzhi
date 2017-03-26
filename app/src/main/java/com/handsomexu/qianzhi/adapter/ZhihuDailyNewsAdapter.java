@@ -22,27 +22,27 @@ import java.util.List;
 
 public class ZhihuDailyNewsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
-    private List<ZhihuDailyNews.Story> storyList;
-    private LayoutInflater inflater;
+    private Context mContext;
+    private List<ZhihuDailyNews.Story> mList;
+    private LayoutInflater mInflater;
     private static final int NORNAL_TYPE = 0;
     private static final int FOOTER_TYPE = 1;
     private OnRecyclerViewOnClickListener mListener;
 
-    public ZhihuDailyNewsAdapter(Context context, List<ZhihuDailyNews.Story> storyList) {
-        this.context = context;
-        this.storyList = storyList;
-        inflater = LayoutInflater.from(context);
+    public ZhihuDailyNewsAdapter(Context context, List<ZhihuDailyNews.Story> mList) {
+        this.mContext = context;
+        this.mList = mList;
+        mInflater = LayoutInflater.from(context);
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == NORNAL_TYPE) {
-            View view = inflater.inflate(R.layout.home_list_item_layout, parent, false);
+            View view = mInflater.inflate(R.layout.home_list_item_layout, parent, false);
             NormalViewHolder normalViewHolder = new NormalViewHolder(view);
             return normalViewHolder;
         } else if (viewType == FOOTER_TYPE) {
-            View view = inflater.inflate(R.layout.list_footer, parent, false);
+            View view = mInflater.inflate(R.layout.list_footer, parent, false);
             FooterViewHolder footerViewHolder = new FooterViewHolder(view);
             return footerViewHolder;
         }
@@ -51,45 +51,46 @@ public class ZhihuDailyNewsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof NormalViewHolder){
-            ZhihuDailyNews.Story story =storyList.get(position);
-            if(story.getImages().get(0) != null){
-               // Glide.with(context).load(story.getImages().get(0)).into(((NormalViewHolder)holder).imageView);
-                Glide.with(context)
+        if (holder instanceof NormalViewHolder) {
+            ZhihuDailyNews.Story story = mList.get(position);
+            if (story.getImages().get(0) != null) {
+                Glide.with(mContext)
                         .load(story.getImages().get(0))
                         .asBitmap()
-                        .placeholder(R.mipmap.ic_launcher)
+                        .placeholder(R.mipmap.expression)
                         .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .error(R.mipmap.ic_launcher)
+                        .error(R.mipmap.error)
                         .centerCrop()
-                        .into(((NormalViewHolder)holder).imageView);
-            }else {
-                (((NormalViewHolder)holder).imageView).setVisibility(View.GONE);
+                        .into(((NormalViewHolder) holder).imageView);
+            } else {
+                (((NormalViewHolder) holder).imageView).setVisibility(View.GONE);
             }
-            ((NormalViewHolder)( holder)).textView.setText(story.getTitle());
+            ((NormalViewHolder) (holder)).textView.setText(story.getTitle());
         }
     }
 
     @Override
     public int getItemCount() {
-        return storyList.size()+1;
+        return mList.size() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == storyList.size()) {
+        if (position == mList.size()) {
             return FOOTER_TYPE;
         }
         return NORNAL_TYPE;
     }
-    public void setItemClickListener(OnRecyclerViewOnClickListener listener){
+
+    public void setItemClickListener(OnRecyclerViewOnClickListener listener) {
         this.mListener = listener;
 
     }
-    public class NormalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    public class NormalViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView textView;
         ImageView imageView;
-        OnRecyclerViewOnClickListener listener;
+
         public NormalViewHolder(View itemView) {
             super(itemView);
             textView = (TextView) itemView.findViewById(R.id.textViewTitle);
@@ -99,8 +100,8 @@ public class ZhihuDailyNewsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         @Override
         public void onClick(View v) {
-            if (mListener != null){
-                mListener.onItemClick(v,getLayoutPosition());
+            if (mListener != null) {
+                mListener.onItemClick(this.getLayoutPosition());
             }
         }
     }

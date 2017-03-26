@@ -1,4 +1,4 @@
-package com.handsomexu.qianzhi.api;
+package com.handsomexu.qianzhi;
 
 /**
  * Created by HandsomeXu on 2017/3/10.

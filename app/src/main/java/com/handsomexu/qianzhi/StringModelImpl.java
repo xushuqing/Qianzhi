@@ -1,4 +1,4 @@
-package com.handsomexu.qianzhi.ClassImpl;
+package com.handsomexu.qianzhi;
 
 import android.content.Context;
 
@@ -6,7 +6,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.handsomexu.qianzhi.interfaces.OnStringListener;
-import com.handsomexu.qianzhi.network.VolleySingleton;
 
 /**
  * Created by HandsomeXu on 2017/3/10.

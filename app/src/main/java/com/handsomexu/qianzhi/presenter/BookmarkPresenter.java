@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.handsomexu.qianzhi.fragments.BookmarkFragment;
 import com.handsomexu.qianzhi.interfaces.BookmarkContract;
-import com.handsomexu.qianzhi.interfaces.ZhihuDailyContract;
 
 /**
  * Created by HandsomeXu on 2017/3/10.
@@ -12,7 +11,8 @@ import com.handsomexu.qianzhi.interfaces.ZhihuDailyContract;
 
 public class BookmarkPresenter implements BookmarkContract.Presenter {
 
-   public BookmarkPresenter(Context context, BookmarkFragment bookmarkFragment){}
+    public BookmarkPresenter(Context context, BookmarkFragment bookmarkFragment) {
+    }
 
 
     @Override

@@ -21,69 +21,72 @@ import com.handsomexu.qianzhi.presenter.DoubanMomentPresenter;
 import com.handsomexu.qianzhi.presenter.GuokrPresenter;
 import com.handsomexu.qianzhi.presenter.ZhihuDailyPresenter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
  * Created by HandsomeXu on 2017/3/11.
  */
 
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment {
 
-    private Context context;
-    private MainPagerAdapter adapter;
+    private Context mContext;
+    private MainPagerAdapter mAdapter;
 
-    private TabLayout tabLayout;
+    private TabLayout mTabLayout;
+    private ViewPager mViewPager;
+    private FloatingActionButton mFab;
+    private List<Fragment> mFragmentList;
 
-    private ZhihuDailyFragment zhihuDailyFragment;
-    private GuokrFragment guokrFragment;
-    private DoubanMomentFragment doubanMomentFragment;
+    private ZhihuFragment mZhihuFragment;
+    private GuokrFragment mGuokrFragment;
+    private DoubanFragment mDoubanFragment;
 
     private ZhihuDailyPresenter zhihuDailyPresenter;
     private GuokrPresenter guokrPresenter;
     private DoubanMomentPresenter doubanMomentPresenter;
 
 
-    public MainFragment(){}
+    public MainFragment() {
+    }
 
     public static MainFragment newInstance() {
         return new MainFragment();
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mFragmentList = new ArrayList<>();
 
-        this.context = getActivity();
+        this.mContext = getActivity();
 
         //Fragment状态恢复
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             FragmentManager manager = getChildFragmentManager();
-            zhihuDailyFragment = (ZhihuDailyFragment) manager.getFragment(savedInstanceState,"zhihu");
-            guokrFragment = (GuokrFragment) manager.getFragment(savedInstanceState,"guokr");
-            doubanMomentFragment = (DoubanMomentFragment) manager.getFragment(savedInstanceState,"douban");
-        }else{
-            //创建Fragment实例
-            zhihuDailyFragment = ZhihuDailyFragment.newInstance();
-            guokrFragment = GuokrFragment.newInstance();
-            doubanMomentFragment = DoubanMomentFragment.newInstance();
+            mZhihuFragment = (ZhihuFragment) manager.getFragment(savedInstanceState, "zhihuFragment");
+            mGuokrFragment = (GuokrFragment) manager.getFragment(savedInstanceState, "guokrFragment");
+            mDoubanFragment = (DoubanFragment) manager.getFragment(savedInstanceState, "doubanFragment");
         }
+        //创建Fragment实例
+        mZhihuFragment = ZhihuFragment.newInstance();
+        mGuokrFragment = GuokrFragment.newInstance();
+        mDoubanFragment = DoubanFragment.newInstance();
+        mFragmentList.add(mZhihuFragment);
+        mFragmentList.add(mGuokrFragment);
+        mFragmentList.add(mDoubanFragment);
 
         //创建Presenter实例
-        zhihuDailyPresenter = new ZhihuDailyPresenter(context,zhihuDailyFragment);
-        guokrPresenter = new GuokrPresenter(context,guokrFragment);
-        doubanMomentPresenter = new DoubanMomentPresenter(context,doubanMomentFragment);
+        zhihuDailyPresenter = new ZhihuDailyPresenter(mContext, mZhihuFragment);
+        guokrPresenter = new GuokrPresenter(mContext, mGuokrFragment);
+        doubanMomentPresenter = new DoubanMomentPresenter(mContext, mDoubanFragment);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-         View view = inflater.inflate(R.layout.fragment_main,container,false);
-
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         //初始化控件
         initView(view);
@@ -92,14 +95,14 @@ public class MainFragment extends Fragment{
         setHasOptionsMenu(true);
 
         //当TabLayou位置为果壳精选时，隐藏FloatingActionButton
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-                if(tab.getPosition() == 1){
-                    fab.hide();
-                }else {
-                    fab.show();
+                FloatingActionButton mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+                if (tab.getPosition() == 1) {
+                    mFab.hide();
+                } else {
+                    mFab.show();
                 }
             }
 
@@ -118,48 +121,44 @@ public class MainFragment extends Fragment{
     }
 
     private void initView(View view) {
-        tabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
-        //设置离线数为3
-        viewPager.setOffscreenPageLimit(3);
-        adapter = new MainPagerAdapter(getChildFragmentManager(),context,zhihuDailyFragment
-        ,guokrFragment,doubanMomentFragment);
+        mTabLayout = (TabLayout) view.findViewById(R.id.tab_layout);
+        mViewPager = (ViewPager) view.findViewById(R.id.view_pager);
+        mViewPager.setOffscreenPageLimit(3);
+        mAdapter = new MainPagerAdapter(getFragmentManager(), mFragmentList);
+        mViewPager.setAdapter(mAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
 
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
-
+        mFab = (FloatingActionButton) view.findViewById(R.id.fab);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.main,menu);
+        inflater.inflate(R.menu.main, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id){
+        switch (item.getItemId()) {
             case R.id.action_feel_lucky:
-                feelLucky();
+                this.feelLucky();
         }
         return true;
     }
 
     //保存状态
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         FragmentManager manager = getChildFragmentManager();
-        manager.putFragment(outState,"zhihu",zhihuDailyFragment);
-        manager.putFragment(outState,"guokr",guokrFragment);
-        manager.putFragment(outState,"douban",doubanMomentFragment);
+        manager.putFragment(outState, "zhihuFragment", mZhihuFragment);
+        manager.putFragment(outState, "guokrFragment", mGuokrFragment);
+        manager.putFragment(outState, "doubanFragment", mDoubanFragment);
     }
 
     private void feelLucky() {
         int type = new Random().nextInt(3);
-        switch (type){
+        switch (type) {
             case 0:
                 zhihuDailyPresenter.feelLucky();
                 break;
@@ -171,7 +170,5 @@ public class MainFragment extends Fragment{
                 break;
         }
     }
-    public MainPagerAdapter getAdapter(){
-        return adapter;
-    }
+
 }

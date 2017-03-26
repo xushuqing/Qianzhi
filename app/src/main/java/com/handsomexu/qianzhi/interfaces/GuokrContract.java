@@ -1,12 +1,14 @@
 package com.handsomexu.qianzhi.interfaces;
 
-import com.handsomexu.qianzhi.bean.ZhihuDailyNews;
+import com.handsomexu.qianzhi.bean.GuokrNews;
+import com.handsomexu.qianzhi.fragments.BaseView;
+import com.handsomexu.qianzhi.presenter.BasePresenter;
 
 import java.util.ArrayList;
 
 /**
  * Created by HandsomeXu on 2017/3/10.
- *
+ * <p>
  * 果壳契约类，用于管理对应的View和Presenter
  */
 
@@ -23,21 +25,20 @@ public interface GuokrContract {
         void stopLoading();
 
         //成功获取数据后，在界面显示
-        void showResults(ArrayList<ZhihuDailyNews.Story> list);
-        //显示日期选择器
-        void showPickDialog();
+        void showResults(ArrayList<GuokrNews.Result> list);
     }
 
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter {
         //请求数据
-        void loadPosts(long date, boolean clearing);
+        void loadPosts();
+
         //刷新数据
         void refresh();
-        //加载更多
-        void loadMore();
+
         //显示详情
         void startReading(int position);
+
         //随便看看
         void feelLucky();
     }

@@ -1,17 +1,13 @@
 package com.handsomexu.qianzhi.presenter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.net.Uri;
-import android.webkit.WebView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
-import com.handsomexu.qianzhi.ClassImpl.StringModelImpl;
-import com.handsomexu.qianzhi.R;
-import com.handsomexu.qianzhi.api.Api;
+import com.handsomexu.qianzhi.Api;
+import com.handsomexu.qianzhi.StringModelImpl;
 import com.handsomexu.qianzhi.bean.BeanType;
+import com.handsomexu.qianzhi.bean.DoubanMomentStory;
 import com.handsomexu.qianzhi.bean.ZhihuDailyStory;
 import com.handsomexu.qianzhi.interfaces.DetailContract;
 import com.handsomexu.qianzhi.interfaces.OnStringListener;
@@ -22,149 +18,112 @@ import com.handsomexu.qianzhi.util.NetworkState;
  */
 
 public class DetailPresenter implements DetailContract.Presenter {
-    private Context context;
-    private DetailContract.View view;
-    private StringModelImpl model;
-    private ZhihuDailyStory zhihuDailyStory;
-    private Intent intent;
-    private Gson gson;
+    private Context mContext;
+    private DetailContract.View mView;
+    private StringModelImpl mModel;
+    private ZhihuDailyStory mZhihuDailyStory;
+    private String mGuokrStory;
+    private Gson mGson;
 
-    private BeanType beanType;
-    private long id;
+    private BeanType mType;
+    private int id;
     private String title;
     private String coverUrl;
 
 
-    public DetailPresenter(Context context,DetailContract.View view){
-        this.context = context;
-        this.view = view;
-        this.view.setPresenter(this);
-        model = new StringModelImpl(context);
-        gson = new Gson();
+    public DetailPresenter(Context context, DetailContract.View mView) {
+        this.mContext = context;
+        this.mView = mView;
+        this.mView.setPresenter(this);
+        mModel = new StringModelImpl(mContext);
+        mGson = new Gson();
     }
 
     @Override
     public void start() {
-
-    }
-
-    @Override
-    public void openInBrowser() {
-        try{
-            Intent intent =  new Intent(Intent.ACTION_VIEW);
-            switch (beanType){
-                case ZHIHU:
-                    intent.setData(Uri.parse(zhihuDailyStory.getShare_url()));
-                case GUOKR:
-                    break;
-                case DOUBAN:
-                    break;
-            }
-            context.startActivity(intent);
-        }catch (android.content.ActivityNotFoundException e){
-            view.showBrowserNotFondError();
-        }
-
-    }
-
-    @Override
-    public void shareAsText() {
-    try{
-        Intent shareIntent = new Intent().setAction(Intent.ACTION_SEND).setType("text/plain");
-        String shareText = "" + title + " ";
-
-        switch (beanType) {
-            case ZHIHU:
-                shareText += zhihuDailyStory.getShare_url();
-                break;
-            case GUOKR:
-                break;
-            case DOUBAN:
-        }
-
-        shareText = shareText + "\t\t\t" + context.getString(R.string.share_extra);
-
-        shareIntent.putExtra(Intent.EXTRA_TEXT,shareText);
-        context.startActivity(Intent.createChooser(shareIntent,context.getString(R.string.share_to)));
-    } catch (android.content.ActivityNotFoundException ex){
-        view.showLoadingError();
-    }
-    }
-
-    @Override
-    public void openUrl(WebView webView, String url) {
-
-    }
-
-    @Override
-    public void copyText() {
-
-    }
-
-    @Override
-    public void copyLink() {
-
-    }
-
-    @Override
-    public void addOrRemoveFromBookmarks() {
-
-    }
-
-    @Override
-    public boolean queryIsBookmarked() {
-        return false;
+        requestData();
     }
 
     @Override
     public void requestData() {
+        if (id == 0 || mType == null) {
+            mView.showLoadingError();
+            return;
+        }
 
-        view.showLoading();
-        view.setTitle(title);
-        view.showCover(coverUrl);
+        mView.showLoading();
+        mView.setTitle(title);
+        mView.showCover(coverUrl);
 
-        if(NetworkState.networkConnected(context)){
-            model.load(Api.ZHIHU_NEWS + Long.toString(id), new OnStringListener() {
-                @Override
-                public void onSuccess(String result) {
-                    zhihuDailyStory = gson.fromJson(result, ZhihuDailyStory.class);
-                   if(zhihuDailyStory.getBody() == null){
-                        view.showResultWithoutBody(zhihuDailyStory.getShare_url());
-                   }else {
-                       view.showResult(covertZhihuContent(zhihuDailyStory.getBody()));
-                   }
-                   view.stopLoading();
-                }
+        if (NetworkState.networkConnected(mContext)) {
+            switch (mType) {
+                case ZHIHU:
+                    mModel.load(Api.ZHIHU_NEWS + id, new OnStringListener() {
+                        @Override
+                        public void onSuccess(String result) {
+                            mZhihuDailyStory = mGson.fromJson(result, ZhihuDailyStory.class);
+                            if (mZhihuDailyStory.getBody() == null) {
+                                mView.showResultWithoutBody(mZhihuDailyStory.getShare_url());
+                            } else {
+                                mView.showResult(covertZhihuContent(mZhihuDailyStory.getBody()));
+                            }
+                            mView.stopLoading();
+                        }
 
-                @Override
-                public void onFailure(VolleyError error) {
-                    view.stopLoading();
-                    view.showLoadingError();
-                }
-            });
+                        @Override
+                        public void onFailure(VolleyError error) {
+                            mView.stopLoading();
+                            mView.showLoadingError();
+                        }
+                    });
+                    break;
+
+                case GUOKR:
+                    mModel.load(Api.GUOKR_ARTICLE_LINK_V1 + id, new OnStringListener() {
+                        @Override
+                        public void onSuccess(String result) {
+                            covertGuokrContent(result);
+                            mView.showResult(mGuokrStory);
+                            mView.stopLoading();
+                        }
+
+                        @Override
+                        public void onFailure(VolleyError error) {
+                            mView.showLoadingError();
+                        }
+                    });
+                    break;
+                case DOUBAN:
+                    mModel.load(Api.DOUBAN_ARTICLE_DETAIL + id, new OnStringListener() {
+                        @Override
+                        public void onSuccess(String result) {
+                            DoubanMomentStory story = new Gson().fromJson(result, DoubanMomentStory.class);
+                            String content = story.getContent();
+                            mView.showResult(content);
+                            mView.stopLoading();
+                        }
+
+                        @Override
+                        public void onFailure(VolleyError error) {
+                            mView.showLoadingError();
+                        }
+                    });
+                    break;
+            }
+
+        } else {
+            mView.showLoadingError();
         }
     }
 
     private String covertZhihuContent(String preResult) {
         preResult = preResult.replace("<div class=\"img-place-holder\">", "");
         preResult = preResult.replace("<div class=\"headline\">", "");
-
         // 在api中，css的地址是以一个数组的形式给出，这里需要设置
-        // in fact,in api,css addresses are given as an array
         // api中还有js的部分，这里不再解析js
-        // javascript is included,but here I don't use it
         // 不再选择加载网络css，而是加载本地assets文件夹中的css
-        // use the css file from local assets folder,not from network
         String css = "<link rel=\"stylesheet\" href=\"file:///android_asset/zhihu_daily.css\" type=\"text/css\">";
 
-
-        // 根据主题的不同确定不同的加载内容
-        // load content judging by different theme
-        String theme = "<body className=\"\" onload=\"onLoaded()\">";
-        if ((context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                == Configuration.UI_MODE_NIGHT_YES){
-            theme = "<body className=\"\" onload=\"onLoaded()\" class=\"night\">";
-        }
 
         return new StringBuilder()
                 .append("<!DOCTYPE html>\n")
@@ -173,25 +132,64 @@ public class DetailPresenter implements DetailContract.Presenter {
                 .append("\t<meta charset=\"utf-8\" />")
                 .append(css)
                 .append("\n</head>\n")
-                .append(theme)
                 .append(preResult)
                 .append("</body></html>").toString();
     }
 
+    private void covertGuokrContent(String content) {
+/**
+ * <div class="down" id="down-footer">
+ <img src="http://static.guokr.com/apps/handpick/images/c324536d.jingxuan-logo.png" class="jingxuan-img">
+ <p class="jingxuan-txt">
+ <span class="jingxuan-title">果壳精选</span>
+ <span class="jingxuan-label">早晚给你好看</span>
+ </p>
+ <a href="" class="app-down" id="app-down-footer">下载</a>
+ </div>
+ <div class="down-pc" id="down-pc">
+ <img src="http://static.guokr.com/apps/handpick/images/c324536d.jingxuan-logo.png" class="jingxuan-img">
+ <p class="jingxuan-txt">
+ <span class="jingxuan-title">果壳精选</span>
+ <span class="jingxuan-label">早晚给你好看</span>
+ </p>
+ <a href="http://www.guokr.com/mobile/" class="app-down">下载</a>
+ </div>
+ */
+        //去掉下载的div部分
+        mGuokrStory = content.replace("<div class=\"down\" id=\"down-footer\">\n" +
+                "        <img src=\"http://static.guokr.com/apps/handpick/images/c324536d.jingxuan-logo.png\" class=\"jingxuan-img\">\n" +
+                "        <p class=\"jingxuan-txt\">\n" +
+                "            <span class=\"jingxuan-title\">果壳精选</span>\n" +
+                "            <span class=\"jingxuan-label\">早晚给你好看</span>\n" +
+                "        </p>\n" +
+                "        <a href=\"\" class=\"app-down\" id=\"app-down-footer\">下载</a>\n" +
+                "    </div>\n" +
+                "\n" +
+                "    <div class=\"down-pc\" id=\"down-pc\">\n" +
+                "        <img src=\"http://static.guokr.com/apps/handpick/images/c324536d.jingxuan-logo.png\" class=\"jingxuan-img\">\n" +
+                "        <p class=\"jingxuan-txt\">\n" +
+                "            <span class=\"jingxuan-title\">果壳精选</span>\n" +
+                "            <span class=\"jingxuan-label\">早晚给你好看</span>\n" +
+                "        </p>\n" +
+                "        <a href=\"http://www.guokr.com/mobile/\" class=\"app-down\">下载</a>\n" +
+                "    </div>", "");
+
+
+    }
 
     public BeanType getBeanType() {
-        return beanType;
+        return mType;
     }
 
-    public void setBeanType(BeanType beanType) {
-        this.beanType = beanType;
+    public void setBeanType(BeanType mType) {
+        this.mType = mType;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

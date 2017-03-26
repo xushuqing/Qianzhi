@@ -20,8 +20,8 @@ import java.util.ArrayList;
  */
 
 public class ZhihuDailyNews {
-    public String date;
-    public ArrayList<Story> stories;
+    String date;
+    ArrayList<Story> stories;
 
     public String getDate() {
         return date;
@@ -40,11 +40,11 @@ public class ZhihuDailyNews {
     }
 
     public class Story {
-        public ArrayList<String> images;
-        public int type;
-        public long id;
-        public String title;
-        public String ga_prefix;
+        ArrayList<String> images;
+        int type;
+        int id;
+        String title;
+        String ga_prefix;
 
         public ArrayList<String> getImages() {
             return images;
@@ -62,11 +62,11 @@ public class ZhihuDailyNews {
             this.type = type;
         }
 
-        public long getId() {
+        public int getId() {
             return id;
         }
 
-        public void setId(long id) {
+        public void setId(int id) {
             this.id = id;
         }
 

@@ -10,10 +10,10 @@ import java.util.Date;
 
 public class DateFormatter {
 
-    public  String ZhihuDateFormat(long date){
+    public String ZhihuDateFormat(long date) {
         String sDate;
         //long类型先转为Date类型
-        Date d = new Date(date + 24*60*60*1000);
+        Date d = new Date(date + 24 * 60 * 60 * 1000);
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         //Date类型转为String类型
         sDate = format.format(d);
@@ -21,7 +21,7 @@ public class DateFormatter {
     }
 
 
-    public  String DoubanDateFormat(long date){
+    public String DoubanDateFormat(long date) {
         String sDate;
         //long类型先转为Date类型
         Date d = new Date(date);

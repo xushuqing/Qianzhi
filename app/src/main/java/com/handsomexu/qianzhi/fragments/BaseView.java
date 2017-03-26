@@ -1,4 +1,4 @@
-package com.handsomexu.qianzhi.interfaces;
+package com.handsomexu.qianzhi.fragments;
 
 import android.view.View;
 

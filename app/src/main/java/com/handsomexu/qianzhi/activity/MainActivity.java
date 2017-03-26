@@ -1,23 +1,24 @@
 package com.handsomexu.qianzhi.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.amitshekhar.DebugDB;
 import com.handsomexu.qianzhi.R;
 import com.handsomexu.qianzhi.fragments.BookmarkFragment;
 import com.handsomexu.qianzhi.fragments.MainFragment;
 import com.handsomexu.qianzhi.presenter.BookmarkPresenter;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private MainFragment mainFragment;
     private BookmarkFragment bookmarksFragment;
@@ -25,38 +26,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DebugDB.getAddressLog();
         setContentView(R.layout.activity_main);
-        
+
         //初始化控件
         initView();
 
         //恢复fragment状态
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             mainFragment = (MainFragment) getSupportFragmentManager()
-                    .getFragment(savedInstanceState,"MainFragment");
+                    .getFragment(savedInstanceState, "MainFragment");
             bookmarksFragment = (BookmarkFragment) getSupportFragmentManager()
-                    .getFragment(savedInstanceState,"BookmarkFragment");
-        }else {
+                    .getFragment(savedInstanceState, "BookmarkFragment");
+        } else {
             mainFragment = MainFragment.newInstance();
             bookmarksFragment = BookmarkFragment.newInstance();
         }
-        if(!mainFragment.isAdded()){
+        if (!mainFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.layout_fragment,mainFragment,"MainFragment")
+                    .add(R.id.layout_fragment, mainFragment, "MainFragment")
                     .commit();
         }
-        if(!bookmarksFragment.isAdded()){
+        if (!bookmarksFragment.isAdded()) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.layout_fragment,bookmarksFragment,"BookmarkFragment")
-                     .commit();
+                    .add(R.id.layout_fragment, bookmarksFragment, "BookmarkFragment")
+                    .commit();
         }
 
         //实例化BookmarkPresenter
-        new BookmarkPresenter(MainActivity.this,bookmarksFragment);
+        new BookmarkPresenter(MainActivity.this, bookmarksFragment);
         //默认显示首页内容
         showMainFragment();
     }
@@ -68,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this,drawerLayout,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
-       drawerLayout.addDrawerListener(toggle);
+                this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //显示MainFragment并设置title
-    private void showMainFragment(){
+    private void showMainFragment() {
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.show(mainFragment);
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //显示BookmarkFragment并设置title
-    private void showBookmarkFragment(){
+    private void showBookmarkFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.show(bookmarksFragment);
         fragmentTransaction.hide(mainFragment);
@@ -100,19 +102,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         drawerLayout.closeDrawer(GravityCompat.START);
-        int id = item.getItemId();
-        switch (id){
+        switch (item.getItemId()) {
             case R.id.nav_home:
                 showMainFragment();
                 break;
             case R.id.nav_bookmark:
-                showBookmarkFragment();
+                //showBookmarkFragment();
                 break;
             case R.id.nav_theme:
                 break;
-            case R.id.nav_setting:
-                break;
             case R.id.nav_about:
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
                 break;
         }
         return true;
@@ -122,11 +123,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mainFragment.isAdded()){
-            getSupportFragmentManager().putFragment(outState,"MainFragment",mainFragment);
+        if (mainFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, "MainFragment", mainFragment);
         }
-        if(bookmarksFragment.isAdded()){
-            getSupportFragmentManager().putFragment(outState,"BookFragment",bookmarksFragment);
+        if (bookmarksFragment.isAdded()) {
+            getSupportFragmentManager().putFragment(outState, "BookFragment", bookmarksFragment);
         }
     }
 }

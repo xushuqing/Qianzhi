@@ -1,13 +1,20 @@
 <resources>
-    <string name="app_name">QianZhi</string>
+    <string name="app_name">千纸阅读</string>
     <string name="nav_home">首页</string>
-    <string name="nav_bookmark">书签</string>
-    <string name="nav_theme">主题</string>
-    <string name="nav_setting">设置</string>
+    <string name="nav_bookmark">书签(功能完善中...)</string>
+    <string name="nav_theme">主题(功能完善中...)</string>
     <string name="nav_about">关于</string>
     <string name="navigation_drawer_open">DrawerOpen</string>
     <string name="navigation_drawer_close">DrawerClose</string>
-    <string name="nav_bookmarks">Bookmarks</string>
+    <string name="nav_bookmarks">书签(功能完善中...)</string>
     <string name="action_feel_lucky">随便看看</string>
-    <string name="load_more">加载更多</string>
+    <string name="load_more">向↑滑动加载更多</string>
+    <string name="fail_please_retry">加载失败，请检查网络后重试</string>
+    <string name="retry">重试</string>
+    <string name="update_complete">数据已更新</string>
+    <string name="about_content">千纸阅读是一款简单实用的阅读类应用，集“知乎日报”、“果壳阅读”、“豆瓣一刻”于一体，给您带来更全面更有趣的阅读体验。</string>
+    <string name="about">关于</string>
+    <string name="version">当前版本：1.0.1</string>
+    <string name="disclainmer">声明：本应用仅供开发交流使用，不作商业用途，如有版权问题，请联系839600108@qq.com</string>
+    <string name="to_top">返回顶部</string>
 </resources>

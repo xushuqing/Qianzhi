@@ -1,9 +1,9 @@
-package com.handsomexu.qianzhi.presenter;
+package com.handsomexu.qianzhi.bean;
 
 /**
  * Created by HandsomeXu on 2017/3/17.
  */
 
-enum BeanType {
-    ZHIHU,GUOKR,DOUBAN;
+public enum BeanType {
+    ZHIHU, GUOKR, DOUBAN;
 }

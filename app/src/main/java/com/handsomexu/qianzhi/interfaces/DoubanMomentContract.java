@@ -1,12 +1,14 @@
 package com.handsomexu.qianzhi.interfaces;
 
-import com.handsomexu.qianzhi.bean.ZhihuDailyNews;
+import com.handsomexu.qianzhi.bean.DoubanMoment;
+import com.handsomexu.qianzhi.fragments.BaseView;
+import com.handsomexu.qianzhi.presenter.BasePresenter;
 
 import java.util.ArrayList;
 
 /**
  * Created by HandsomeXu on 2017/3/10.
- *
+ * <p>
  * 豆瓣契约类，用于管理对应的View和Presenter
  */
 
@@ -23,21 +25,29 @@ public interface DoubanMomentContract {
         void stopLoading();
 
         //成功获取数据后，在界面显示
-        void showResults(ArrayList<ZhihuDailyNews.Story> list);
+        void showResults(ArrayList<DoubanMoment.Post> list);
+
+        //显示更新完成
+        void showUpdateComplete();
+
         //显示日期选择器
         void showPickDialog();
     }
 
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter {
         //请求数据
         void loadPosts(long date, boolean clearing);
+
         //刷新数据
         void refresh();
+
         //加载更多
-        void loadMore();
+        void loadMore(long date);
+
         //显示详情
         void startReading(int position);
+
         //随便看看
         void feelLucky();
     }

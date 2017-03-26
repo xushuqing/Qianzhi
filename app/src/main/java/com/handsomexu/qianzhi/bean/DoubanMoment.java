@@ -1,9 +1,10 @@
 package com.handsomexu.qianzhi.bean;
 
-import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 
 /**
  * Created by HandsomeXu on 2017/3/21.
+ * JsonString:
  * {
  * "count": 0,
  * "posts": [
@@ -56,15 +57,35 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class DoubanMoment {
+    ArrayList<Post> posts;
+
+    public ArrayList<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(ArrayList<Post> posts) {
+        this.posts = posts;
+    }
 
 
-    public class posts {
+    public class Post {
 
-        private String published_time;
-        private String created_time;
-        private String title;
-        private String share_pic_url;
-        private int id;
+        String published_time;
+        String created_time;
+        String title;
+        ArrayList<Thumb> thumbs;
+        String short_url;
+
+        public String getShort_url() {
+            return short_url;
+        }
+
+        public void setShort_url(String short_url) {
+            this.short_url = short_url;
+        }
+
+        String share_pic_url;
+        int id;
 
         public String getPublished_time() {
             return published_time;
@@ -90,6 +111,7 @@ public class DoubanMoment {
             this.title = title;
         }
 
+
         public String getShare_pic_url() {
             return share_pic_url;
         }
@@ -106,6 +128,74 @@ public class DoubanMoment {
             this.id = id;
         }
 
+        public ArrayList<Thumb> getThumbs() {
+            return thumbs;
+        }
+
+        public void setThumbs(ArrayList<Thumb> thumbs) {
+            this.thumbs = thumbs;
+        }
+
+
+        public class Thumb {
+            Medium medium;
+            String description;
+            String tag_name;
+
+            public Medium getMedium() {
+                return medium;
+            }
+
+            public void setMedium(Medium medium) {
+                this.medium = medium;
+            }
+
+            public String getDescription() {
+                return description;
+            }
+
+            public void setDescription(String description) {
+                this.description = description;
+            }
+
+            public String getTag_name() {
+                return tag_name;
+            }
+
+            public void setTag_name(String tag_name) {
+                this.tag_name = tag_name;
+            }
+
+            public class Medium {
+                String url;
+                int width;
+                int height;
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+
+                public int getWidth() {
+                    return width;
+                }
+
+                public void setWidth(int width) {
+                    this.width = width;
+                }
+
+                public int getHeight() {
+                    return height;
+                }
+
+                public void setHeight(int height) {
+                    this.height = height;
+                }
+            }
+        }
     }
 
 }

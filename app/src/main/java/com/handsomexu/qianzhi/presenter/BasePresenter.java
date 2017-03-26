@@ -1,4 +1,4 @@
-package com.handsomexu.qianzhi.interfaces;
+package com.handsomexu.qianzhi.presenter;
 
 /**
  * Created by HandsomeXu on 2017/3/10.

@@ -1,15 +1,11 @@
 package com.handsomexu.qianzhi.adapter;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.handsomexu.qianzhi.fragments.DoubanMomentFragment;
-import com.handsomexu.qianzhi.fragments.GuokrFragment;
-import com.handsomexu.qianzhi.fragments.ZhihuDailyFragment;
+import com.handsomexu.qianzhi.fragments.DoubanFragment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,16 +14,12 @@ import java.util.List;
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
     private List<Fragment> mFragmentList;
-    public MainPagerAdapter(FragmentManager fm, Context context
-            , ZhihuDailyFragment zhihuDailyFragment
-            , GuokrFragment guokrFragment
-            , DoubanMomentFragment doubanMomentFragment) {
-        super(fm);
-        mFragmentList = new ArrayList<>();
-        mFragmentList.add(zhihuDailyFragment);
-        mFragmentList.add(guokrFragment);
-        mFragmentList.add(doubanMomentFragment);
+    private String[] mTitles;
 
+    public MainPagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
+        super(fm);
+        this.mFragmentList = fragmentList;
+        mTitles = new String[]{"知乎日报", "果壳阅读", "豆瓣一刻"};
     }
 
     @Override
@@ -38,5 +30,14 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         return mFragmentList.size();
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return mTitles[position];
+    }
+
+    public DoubanFragment getDoubanFragment() {
+        return (DoubanFragment) mFragmentList.get(2);
     }
 }

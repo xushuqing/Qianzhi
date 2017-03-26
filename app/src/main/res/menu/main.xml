@@ -1,21 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:id="@+id/menu_home"
-          android:icon="@mipmap/ic_launcher"
-          android:title="@string/nav_home"/>
-
-    <item android:id="@+id/menu_bookmark"
-          android:icon="@mipmap/ic_launcher"
-          android:title="@string/nav_bookmark"/>
-    <item android:id="@+id/menu_theme"
-          android:icon="@mipmap/ic_launcher"
-          android:title="@string/nav_theme"/>
-    <item android:id="@+id/menu_setting"
-          android:icon="@mipmap/ic_launcher"
-          android:title="@string/nav_setting"/>
-    <item android:id="@+id/action_feel_lucky"
-          android:icon="@mipmap/ic_launcher"
-          android:title="@string/action_feel_lucky"/>
+    <item
+        android:id="@+id/action_feel_lucky"
+        android:icon="@mipmap/ic_launcher"
+        android:title="@string/action_feel_lucky"/>
 
 </menu>
