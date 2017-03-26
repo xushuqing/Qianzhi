@@ -13,24 +13,24 @@ import com.android.volley.toolbox.Volley;
 
 public class VolleySingleton {
     private static VolleySingleton volleySingleton;
-    private RequestQueue requestQueue;
+    private RequestQueue mRequestQueue;
 
-    private VolleySingleton(Context context){
-        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+    private VolleySingleton(Context context) {
+        mRequestQueue = Volley.newRequestQueue(context.getApplicationContext());
     }
 
-    public static synchronized VolleySingleton getVolleySingleton(Context context){
-        if(volleySingleton == null){
+    public static synchronized VolleySingleton getVolleySingleton(Context context) {
+        if (volleySingleton == null) {
             volleySingleton = new VolleySingleton(context);
         }
         return volleySingleton;
     }
 
-    public RequestQueue getRequestQueue(){
-        return this.requestQueue;
+    public RequestQueue getRequestQueue() {
+        return this.mRequestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> request){
+    public <T> void addToRequestQueue(Request<T> request) {
         getRequestQueue().add(request);
     }
 }

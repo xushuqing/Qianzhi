@@ -13,21 +13,20 @@ import com.handsomexu.qianzhi.network.VolleySingleton;
  */
 
 public class StringModelImpl {
-    private Context context;
+    private Context mContext;
     private OnStringListener mOnStringListener;
 
-    public StringModelImpl(Context context){
-        this.context = context;
+    public StringModelImpl(Context context) {
+        this.mContext = context;
     }
 
-    public void load(String url, final OnStringListener listener){
+    public void load(String url, final OnStringListener listener) {
         mOnStringListener = listener;
 
-        StringRequest request = new StringRequest(url,onSuccessListener,onErrorListener);
+        StringRequest request = new StringRequest(url, onSuccessListener, onErrorListener);
 
-        VolleySingleton.getVolleySingleton(context).addToRequestQueue(request);
+        VolleySingleton.getVolleySingleton(mContext).addToRequestQueue(request);
     }
-
 
 
     Response.Listener onSuccessListener = new Response.Listener<String>() {
