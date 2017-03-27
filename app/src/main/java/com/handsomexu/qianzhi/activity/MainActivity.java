@@ -10,7 +10,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.amitshekhar.DebugDB;
 import com.handsomexu.qianzhi.R;
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
+    private long exitTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +131,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if (bookmarksFragment.isAdded()) {
             getSupportFragmentManager().putFragment(outState, "BookFragment", bookmarksFragment);
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            exit();
+        }
+        return true;
+    }
+    void exit(){
+        if(System.currentTimeMillis() - exitTime > 2000){
+            Toast.makeText(this,"再按一次退出",Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        }
+        else {
+            finish();
         }
     }
 }

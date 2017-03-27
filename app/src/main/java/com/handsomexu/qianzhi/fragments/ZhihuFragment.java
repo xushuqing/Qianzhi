@@ -86,7 +86,7 @@ public class ZhihuFragment extends Fragment implements ZhihuDailyContract.View {
 
         //豆瓣精选的fab点击事件放到知乎fragment
         //fab属于activity里的View
-        //如果每个fragment都去设置监听，将导致先钱设置的listener失效
+        //如果每个fragment都去设置监听，将导致先设置的监听失效
         //如果将监听放到pagerAdapter中，会引起recyclerView和fab的监听冲突，fab监听失效
         //根据tabLayout的位置选择不同的dialog;
         mFab = (FloatingActionButton) getActivity().findViewById(R.id.fab);
